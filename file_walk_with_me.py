@@ -4,22 +4,43 @@ Created on Sun Feb 21 16:16:28 2016
 
 @author: Connor
 """
-
+import os
 from os import walk
 import pandas as pd
 
 
-folder = 'C:\Users\lp0ougx3\Desktop\Development\knox_realty\wanted_data'
 
-f = []
-for (dirpath, dirnames, filenames) in walk(folder):
-    f.extend(filenames)
-    break
+# this function walks through a directory of csvs and filters them all be a specific
+# column and value pair, returning filtered csvs to the host directory of the script
+# calling the function
 
-for fname in f:
-    df = pd.read_csv(folder+ '\\' + fname)
+def file_walk(directory):
+    file_name_list = []
+    for (dirpath, dirnames, filenames) in walk(directory):
+        file_name_list.extend(filenames)
+        break
+    return(file_name_list)
+
+
+
+def filter_walk(source_directory, output_directory, column, value):
     
-    df = df[df['RegionName'] == 37917]
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)    
     
-    df.to_csv(fname, index = False)
+    file_name_list = []
+    for (dirpath, dirnames, filenames) in walk(source_directory):
+        file_name_list.extend(filenames)
+        break
     
+    for fname in file_name_list:
+        
+        df = pd.read_csv(source_directory+ '\\' + fname)
+        df = df[df[column] == value]
+        output_name = output_directory+ '\\' + fname
+        df.to_csv(output_name, index = False)
+        
+
+
+    
+        
