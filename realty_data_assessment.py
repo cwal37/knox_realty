@@ -18,7 +18,7 @@ plt.close()
 mpl.rcdefaults()
 mpl.rcParams['figure.figsize'] = 14, 9
 plt.style.use('ggplot')
-mpl.rcParams.update({'font.size': 7})
+mpl.rcParams.update({'font.size': 9})
 
 
 # location of unscrubbed (for knoxville) realty data, hundreds of MB, so excluded
@@ -98,15 +98,17 @@ for fname in file_names:
     if df.columns[col_count-1] != '2015-12':
         print "Not time series data"
     else:
-        y = range(0.5,36.5,1)
+        y = range(0,36)
         x = []
         #print fname
         labels = df.columns[col_count-36:col_count]
-        for i in range(col_count-37,col_count-1):
+        for i in range(col_count-36,col_count):
             #print i
             #pdb.set_trace()
             x.append(df.ix[0][i])
-            
+        
+        #y = [y+0.5 for y in y]        
+        
         plt.plot(y,x, linewidth = 4)
         plt.xlabel(file_name_dict[fname][0])
         plt.ylabel(file_name_dict[fname][1])
